@@ -11,7 +11,10 @@ int rnd(int i);
 
 int main()
 {
-	int Pid,PidTerminou, Estado;
+		int numberOfChildren = 10;
+	pid_t *childPids = NULL;
+	pid_t p;
+	//int Pid,PidTerminou, Estado;
 	
 	char *texts_vect[]={"aaaaaaaaa\n","bbbbbbbbb\n","ccccccccc\n","ddddddddd\n",
 		"eeeeeeeee\n","fffffffff\n","ggggggggg\n","hhhhhhhhh\n","iiiiiiiii\n","jjjjjjjjj\n"};
@@ -21,28 +24,32 @@ int main()
 	int pos_file = sizeof(files_vect)/sizeof(char*); 					
 	int pos_text = sizeof(texts_vect)/sizeof(char*);
 
-	
-	for (int i = 0; i < 3; ++i) {
 
-		if((Pid=fork())==0){
-			printf("sou o processo filho - %d\n",i);
-			escritor(files_vect,texts_vect,pos_file,pos_text);
-			
-		}
+/* Allocate array of child PIDs: error handling omitted for brevity */
+childPids = malloc(numberOfChildren * sizeof(pid_t));
 
-		else{
-			printf("criou um subprocesso de indentificador = %d\n",Pid);
-			PidTerminou= waitpid(Pid, NULL, WNOHANG);
-			printf("terminou um subprocesso de indentificador = %d\n",PidTerminou);
+/* Start up children */
+for (int i = 0; i < 4; ++i) {
+   if ((p = fork()) == 0) {
+      
+     printf("sou o processo filho - %d\n",i);
+	escritor(files_vect,texts_vect,pos_file,pos_text);
 
-		}
-	}
-	
-
-	return 0;
-
-
+      exit(0);
+   }
+   else {
+      childPids[i] = p;
+     printf("criou um subprocesso de indentificador = %d\n",p);
+   }
 }
+
+printf("aqui\n");
+/* Cleanup */
+free(childPids);
+return 1;
+}
+	
+
 
 
 
