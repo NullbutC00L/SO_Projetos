@@ -14,7 +14,7 @@ int main()
 		int numberOfChildren = 10;
 	pid_t *childPids = NULL;
 	pid_t p;
-	//int Pid,PidTerminou, Estado;
+	int Pid,PidTerminou, Estado;
 	
 	char *texts_vect[]={"aaaaaaaaa\n","bbbbbbbbb\n","ccccccccc\n","ddddddddd\n",
 		"eeeeeeeee\n","fffffffff\n","ggggggggg\n","hhhhhhhhh\n","iiiiiiiii\n","jjjjjjjjj\n"};
@@ -38,8 +38,10 @@ for (int i = 0; i < 4; ++i) {
       exit(0);
    }
    else {
-      childPids[i] = p;
-     printf("criou um subprocesso de indentificador = %d\n",p);
+      	printf("criou um subprocesso de indentificador = %d\n",p);
+		PidTerminou= waitpid(p, NULL, WNOHANG);
+		printf("terminou um subprocesso de indentificador = %d\n",PidTerminou);
+
    }
 }
 
