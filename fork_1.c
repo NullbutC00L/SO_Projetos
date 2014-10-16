@@ -6,11 +6,12 @@
 int main()
 {
 	int Pid,PidTerminou, status;
+	int i;
 	time_t init,fim;	
 
 
 	init= time(NULL);
-	for (int i = 0; i < 10; i++)
+	for (i = 0; i < 10; i++)
 	{
 
 		if((Pid=fork())==0){
@@ -25,9 +26,9 @@ int main()
 		else if(Pid==-1)
 			return -1;
 	}
+
 	
-	
-	for (int i = 0; i < 10; i++)
+	for (i = 0; i < 10; i++)
 	{
 		PidTerminou= wait(&status);
 	}
