@@ -52,7 +52,7 @@ int escritor(char *file_vect[],char *text_vect[],int tam_file,int tam_text){
 		
 		
 			
-		file=open(file_vect[pos_file],O_WRONLY | O_APPEND|O_TRUNC|O_CREAT,
+		file=open(file_vect[pos_file],O_WRONLY |O_TRUNC|O_CREAT,
 				S_IRUSR|S_IRGRP|S_IROTH|S_IWUSR|S_IWGRP|S_IWOTH|S_IXUSR|S_IXGRP|S_IXOTH); /*faz-se uma chamada de sistema para abrir o ficheiro com as respectivas permissoes*/
 		if(file < 0)		/*verifica se o ficheiro foi aberto com sucesso*/
 	        return -1;

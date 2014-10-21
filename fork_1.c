@@ -2,6 +2,9 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <time.h>
+# define FILHOS 10
+# define EXECUTAVEL "escritor"
+
 
 int main()
 {
@@ -11,15 +14,15 @@ int main()
 
 
 	init= time(NULL);
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < FILHOS; i++)
 	{
 
 		if((Pid=fork())==0){
 
 			printf("O processo filho vai-se executar o escritor... \n");
-			execl("escritor","escritor",0);
+			execl(EXECUTAVEL,EXECUTAVEL,0);
 				
-
+			perror("ocorreu um erro com o processo filho");
 			exit(-1);
 			}
 
@@ -28,7 +31,7 @@ int main()
 	}
 
 	
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < FILHOS; i++)
 	{
 		PidTerminou= wait(&status);
 	}
