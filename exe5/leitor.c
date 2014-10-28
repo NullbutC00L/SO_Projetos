@@ -4,6 +4,8 @@
 # include <stdlib.h>
 # include <string.h>
 # include <sys/file.h>
+# include <errno.h>
+# include <stdio.h>
 # define TAM_BUFF 11
 # define LINE_SIZE 10
 
@@ -47,7 +49,14 @@ int leitor(char *file_vect[],int tam_file){
 
 	file=open(file_vect[pos_file],O_RDONLY,S_IRUSR|S_IRGRP|S_IROTH|S_IXUSR|S_IXGRP|S_IXOTH);
 	/*faz-se uma chamada de sistema para abrir o ficheiro com as respectivas permissoes*/
-	flock(file,1);
+	
+	if (flock(file,LOCK_NB) == -1) {
+       int errsv = errno;
+       printf("flock() failed\n");
+
+   }
+	flock(file,LOCK_SH);
+
 	if(file < 0)
         return -1;
 
@@ -72,7 +81,8 @@ int leitor(char *file_vect[],int tam_file){
 
 	
 	}
-	flock(file,8);
+	flock(file,LOCK_UN);
+
 	close(file);
 	
 	

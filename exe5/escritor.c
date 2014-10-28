@@ -4,6 +4,8 @@
 # include <string.h>
 # include <time.h>
 # include <sys/file.h>
+# include <errno.h>
+# include <stdio.h>
 
 
 int escritor(char *file_vect[],char *text_vect[],int tam_file,int tam_text);
@@ -38,7 +40,8 @@ int escritor(char *file_vect[],char *text_vect[],int tam_file,int tam_text){
 	int file;
 	int i;
 	srand(time(NULL));
-	
+	int numb=0;
+
 	for(;a<512;a++){ 
 	
 		pos_file = rnd(tam_file); 		/*atribuimos valores random que escolheram na lista o nome do ficheiro a atribuir*/			
@@ -47,7 +50,17 @@ int escritor(char *file_vect[],char *text_vect[],int tam_file,int tam_text){
 				
 		file=open(file_vect[pos_file],O_WRONLY |O_TRUNC|O_CREAT,
 				S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH); /*faz-se uma chamada de sistema para abrir o ficheiro com as respectivas permissoes*/
-		flock(file,2);
+		
+		if (flock(file,LOCK_EX|LOCK_NB) == -1) {
+               int errsv = errno;
+               numb++;
+
+               printf("flock failed numb=  %d\n",numb);
+ 
+           }
+
+       flock(file,LOCK_EX);
+
 		if(file < 0)		/*verifica se o ficheiro foi aberto com sucesso*/
 	        return -1;
 		for(i=0;i<1024;i++){		
@@ -59,7 +72,7 @@ int escritor(char *file_vect[],char *text_vect[],int tam_file,int tam_text){
 				}
 
 		}
-		flock(file,8);
+		flock(file,LOCK_UN);
 		close(file);			/*fecha o ficheiro para guardar as alterações efectuadas*/
 	}
 
