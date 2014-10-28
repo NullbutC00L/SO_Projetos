@@ -3,6 +3,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <time.h>
+# include <sys/file.h>
 
 
 int escritor(char *file_vect[],char *text_vect[],int tam_file,int tam_text);
@@ -46,6 +47,7 @@ int escritor(char *file_vect[],char *text_vect[],int tam_file,int tam_text){
 				
 		file=open(file_vect[pos_file],O_WRONLY |O_TRUNC|O_CREAT,
 				S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH); /*faz-se uma chamada de sistema para abrir o ficheiro com as respectivas permissoes*/
+		flock(file,2);
 		if(file < 0)		/*verifica se o ficheiro foi aberto com sucesso*/
 	        return -1;
 		for(i=0;i<1024;i++){		
@@ -57,6 +59,7 @@ int escritor(char *file_vect[],char *text_vect[],int tam_file,int tam_text){
 				}
 
 		}
+		flock(file,8);
 		close(file);			/*fecha o ficheiro para guardar as alterações efectuadas*/
 	}
 
